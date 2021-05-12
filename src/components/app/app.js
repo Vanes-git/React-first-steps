@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import nextId from "react-id-generator";
 
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
@@ -13,16 +14,14 @@ export default class App extends Component {
         super(props);
         this.state = {
             data : [
-                {label: 'Going to learn react', important: true , id: 1},
-                {label: 'Great', important: false , id: 2},
-                {label: 'I need a break...', important: false , id: 3}
+                {label: 'Going to learn react', important: true , id: nextId()},
+                {label: 'Great', important: false , id: nextId()},
+                {label: 'I need a break...', important: false , id: nextId()}
             ]
         }
         this.deleteItem = this.deleteItem.bind(this);
-        this.addItem = this.addItem.bind(this);
-
-        this.maxId = 4;
-    }
+        this.addItem = this.addItem.bind(this);        
+    }    
 
     deleteItem(id){
         this.setState(({data})=>{
@@ -39,7 +38,7 @@ export default class App extends Component {
         const newItem ={
             label: body,
             important: false,
-            id: this.maxId++
+            id: nextId()
         }
 
         this.setState(({data}) => {
