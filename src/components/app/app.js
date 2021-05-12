@@ -18,13 +18,15 @@ export default class App extends Component {
                 {label: 'Great', important: false, like: false, id: nextId()},
                 {label: 'I need a break...', important: false, like: false, id: nextId()}
             ],
-            term: ''
+            term: '',
+            filter: 'all'
         }
         this.deleteItem = this.deleteItem.bind(this);
         this.addItem = this.addItem.bind(this);       
         this.onToggleImportant = this.onToggleImportant.bind(this);
         this.onToggleLiked = this.onToggleLiked.bind(this); 
         this.onUpdeateSearch = this.onUpdeateSearch.bind(this); 
+        this.onFilterSelect = this.onFilterSelect.bind(this); 
     }    
 
     deleteItem(id){
@@ -89,15 +91,27 @@ export default class App extends Component {
         });
     }
 
+    filterPost(items, filter) {
+        if(filter === 'like') {
+            return items.filter(item => item.like)
+        } else {
+            return items
+        }
+    }
+
     onUpdeateSearch(term) {
         this.setState({term});
     }
 
+    onFilterSelect(filter){
+        this.setState({filter})
+    }
+
     render() {
-        const {data, term} = this.state;
+        const {data, term, filter} = this.state;
         const liked = data.filter(item => item.like).length;
         const allPosts = data.length;
-        const visiblePosts = this.searchPost(data, term);
+        const visiblePosts = this.filterPost(this.searchPost(data, term), filter);
 
         return(
             <div className="app">
@@ -107,7 +121,9 @@ export default class App extends Component {
                 <div className="search-panel d-flex">
                     <SearchPanel
                         onUpdeateSearch={this.onUpdeateSearch}/>
-                    <PostStatusFilter/>
+                    <PostStatusFilter 
+                        filter={filter}
+                        onFilterSelect={this.onFilterSelect}/>
                 </div>
                 <PostList 
                     posts={visiblePosts}
